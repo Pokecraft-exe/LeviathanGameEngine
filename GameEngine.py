@@ -7,4 +7,7 @@ root.geometry("720x500")
 rightframe = tk.Frame(root, bg='red')
 rightframe.pack(side="right", fill='both')
 
+projectsframe = tk.Frame(root, bg='red')
+projectsframe.pack(side="right", fill='both')
+
 root.mainloop()
