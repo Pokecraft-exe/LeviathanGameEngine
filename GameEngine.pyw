@@ -49,7 +49,7 @@ textBoxNameProject.pack()
 projectsframe = tk.Frame(root, bg=bgcolor)
 projectsframe.pack(side="left", fill='both')
 
-openRecentLabel = tk.Label(projectsframe, text="Open Recent", bg=bgcolor, fg='white')
+openRecentLabel = tk.Label(projectsframe, text="Open Local", bg=bgcolor, fg='white')
 openRecentLabel.pack(fill='y')
 
 currentProjects = tk.Listbox(projectsframe, bg=bgcolor, fg='white', highlightthickness=0, borderwidth=0, selectbackground="#332222")
