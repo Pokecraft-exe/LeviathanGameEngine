@@ -1,5 +1,5 @@
 import tkinter as tk
-from projectSolution import loadProject, loadNewProject
+from LGE_IDE_assets.projectSolution import loadProject, loadNewProject
 import os
 
 bgcolor = "#211111"
@@ -25,7 +25,7 @@ root.configure(bg=bgcolor)
 root.resizable(False, False)
 root.title("Leviathan Game Engine 2024")
 root.geometry("360x250")
-root.iconbitmap(default="icon.ico")
+root.iconbitmap(default="LGE_IDE_assets/icon.ico")
 projectName = tk.StringVar()
 
 rightframe = tk.Frame(root, bg=bgcolor)
