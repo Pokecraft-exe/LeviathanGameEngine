@@ -46,7 +46,7 @@ class ListImageItemCollapsable(tk.Frame):
                 i[1].pack(side='left') # the image
                 i[2].pack(side='left') # the label
             elif (len(i) == 1):
-                # frame item (non collapsable)
+                # list item (collapsable)
                 i[0].pack()
             else:
                 i[0].pack(fill='x')
@@ -57,6 +57,22 @@ class ListImageItemCollapsable(tk.Frame):
                 else:
                     i[1].configure(image=self.imageCollapse)
                 i[3].pack(side="left")
+        return
+    def bind_cascade(self, event, function, add = True):
+        for i in self.items:
+            if (len(i) == 3):
+                # frame item (non collapsable)
+                i[0].bind(event, function, add) # the frame
+                i[1].bind(event, function, add) # the image
+                i[2].bind(event, function) # the label
+            elif (len(i) == 1):
+                # list item (collapsable)
+                i[0].bind_cascade(event, function, add)
+            else:
+                i[0].bind(event, function, add)
+                i[1].bind(event, function, add)
+                i[2].bind(event, function, add)
+                i[3].bind(event, function, add)
         return
     def deselect(self, noparent = False):
         if (self.selected != None):
