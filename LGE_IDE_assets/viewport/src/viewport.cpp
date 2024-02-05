@@ -9,16 +9,35 @@ void drawXAxis(void* w, void* _this, int x, int y) {
 	((window*)w)->DrawRect(x + 100, y - 2, 2, 2, 0x0000ff);
 }
 
-class pickableLabel : Button {
-	Scale Xaxis = Scale();
-	Scale  Yaxis = Scale();
-	pickableLabel() {
-		text = "Label";
-		x = 0;
-		y = 0;
-		anchor = ANCHOR::NORTH_EAST;
+class pickableWidget : public Button {
+public:
+	Scale Xaxis;
+	Scale Yaxis;
+	BaseWidget* wrapped;
+	pickableWidget() {}
+	pickableWidget(BaseWidget* w) {
+		text = "";
+		x = w->x;
+		y = w->y;
+		sizex = w->sizex;
+		sizey = w->sizey;
+		anchor = w->anchor;
+		wrapped = w;
 		ptrToWidget = this;
-		Type = WIDGET_TYPE_FOCUSABLE;
+		Type = WIDGET_TYPE_CLICKABLE;
+
+		Xaxis = Scale(sizex + x + 10, y, 100, 20, 100, true, nullptr);
+		Yaxis = Scale(sizex/2 + x, y - 110, 20, 100, 100, false, nullptr);
+	}
+	bool focused(window* w) {
+		return true;
+	}
+};
+
+void drawPickableWidget(void* w, void* _this, int x, int y) {
+	if (((pickableWidget*)_this)->focused((window*)w)) {
+		((pickableWidget*)_this)->Xaxis.attach(w);
+		((pickableWidget*)_this)->Yaxis.attach(w);
 	}
 }
 
@@ -28,6 +47,8 @@ class GameEngine : public SDLGameEngine {
 public:
 	window pickScreen;
 	Button labelButton;
+	Button button;
+	pickableWidget pick;
 	int widgetToAdd = 0;
 
 	bool OnUserCreates() {
@@ -46,6 +67,12 @@ public:
 		labelButton = Button("Add Label", 1, 1, 100, 100, 0xffffff, pickScreenAddLabel, this);
 		labelButton.ptrToWidget = &labelButton;
 		labelButton.attach(&pickScreen);
+
+		button = Button("Label", 1, 1, 100, 100, 0xffffff, pickScreenAddLabel, this);
+		pick = pickableWidget(&button);
+		
+		pick.attach(&screen);
+		button.attach(&screen);
 		return true;
 	}
 
@@ -59,7 +86,8 @@ public:
 		screen.DrawString("FPS: " + to_string(fps()), 10, 5, 0xff6666, 2);
 
 		screen.DrawWidgets();
-		pickScreen.DrawWidgets();
+		//pickScreen.DrawWidgets();
+
 
 		screen.update();
 		pickScreen.update();
