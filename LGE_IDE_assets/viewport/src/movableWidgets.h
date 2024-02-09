@@ -2,6 +2,7 @@
 #include <widgets.h>
 using std::string;
 
+/*
 class MovableLabel : public BaseWidget {
 public:
 	MovableLabel() {}
@@ -12,14 +13,12 @@ public:
 
 class MovableImage : public BaseWidget {
 public:
-	MovableLabel() {}
-	MovableLabel(string image, int x, int y);
+	MovableImage() {}
+	MovableImage(string image, int x, int y);
 	SDL_Surface* image;
 };
 
-
-
-typedef int FUNCTION_CALL(void*);
+*/
 
 class MovableButton : public BaseWidget {
 public:
@@ -29,9 +28,12 @@ public:
 	Color color;
 	FUNCTION_CALL* OnClick;
 	void* ptr;
+	Scale Xaxis;
+	Scale Yaxis;
+	int onDragAxis(void*, int, int);
 };
 
-
+/*
 
 class MovableEntry : public BaseWidget {
 public:
@@ -65,4 +67,5 @@ public:
 	void* ptr;
 	float value = 0;
 	int max = 100;
-};+
+};
+*/

@@ -1,6 +1,7 @@
 #include <window.h>
 #include "movableWidgets.h"
 
+/*
 void drawLabel(void* w, void* _this, int x, int y) {
 	((window*)w)->DrawString(((Label*)_this)->text, x, y, ((Label*)_this)->color, 2);
 }
@@ -34,15 +35,23 @@ Image::Image(string _image, int _x, int _y) {
 	ptrToWidget = this;
 };
 
+*/
 
-
-void drawButton(void* w, void* _this, int x, int y) {
+void drawMovableButton(void* w, void* _this, int x, int y) {
+	if (((window*)w)->focused == _this) {
+		((MovableButton*)_this)->Xaxis.draw(w, &((MovableButton*)_this)->Xaxis, x, y);
+		((MovableButton*)_this)->Xaxis.visible = true;
+		((MovableButton*)_this)->Yaxis.draw(w, &((MovableButton*)_this)->Yaxis, x, y);
+		((MovableButton*)_this)->Yaxis.visible = true;
+	}
 	((window*)w)->DrawRect(x - 2, y - 2, ((Button*)_this)->sizex + 2, ((Button*)_this)->sizey + 2, 0xAAAAAA);
 	((window*)w)->DrawRect(x, y, ((Button*)_this)->sizex, ((Button*)_this)->sizey, ((Button*)_this)->color);
 	((window*)w)->DrawString(((Button*)_this)->text, x, y, 0, 1);
+	((MovableButton*)_this)->Yaxis.visible = true;
+	((MovableButton*)_this)->Yaxis.visible = true;
 }
 
-Button::Button(string _text, int _x, int _y, int _sizex, int _sizey, Color _color, FUNCTION_CALL* _OnClick, void* _ptr) {
+MovableButton::MovableButton(string _text, int _x, int _y, int _sizex, int _sizey, Color _color, FUNCTION_CALL* _OnClick, void* _ptr) {
 	text = _text;
 	x = _x;
 	y = _y;
@@ -51,11 +60,25 @@ Button::Button(string _text, int _x, int _y, int _sizex, int _sizey, Color _colo
 	color = _color;
 	OnClick = _OnClick;
 	ptr = _ptr;
-	Type = WIDGET_TYPE_CLICKABLE;
-	draw = drawButton;
+	Type = WIDGET_TYPE_FOCUSABLE;
+	draw = drawMovableButton;
 	ptrToWidget = this;
+	Xaxis = Scale(x + sizex	, y, 100, 5, 100, true, &onDragAxis);
+	Yaxis = Scale(x + sizex / 2, y - 110, 5, 100, 100, false, &onDragAxis);
 }
 
+int MovableButton::onDragAxis(void* ptrScale, int unused, int unused_) {
+	if (((Scale*)ptrScale)->horizontal) {
+		this->x += ((Scale*)ptrScale)->value - 50;
+	}
+	else {
+		this->y += ((Scale*)ptrScale)->value - 50;
+	}
+	((Scale*)ptrScale)->value = 50;
+	return 0;
+}
+
+/*
 
 void drawEntry(void* w, void* _this, int x, int y) {
 	((window*)w)->DrawRect(x - 2, y - 2, ((Entry*)_this)->sizex + 2, ((Entry*)_this)->sizey + 2, 0xAAAAAA);
@@ -158,12 +181,4 @@ Scale::Scale(int _x, int _y, int _sizex, int _sizey, int _max, bool _horizontal,
 	max = _max;
 	Type = WIDGET_TYPE_DRAGGABLE;
 }
-
-
-
-void drawEndWidget(void* a, void* b, int c, int d) { return; }
-
-EndWidget::EndWidget() {
-	draw = (DRAW_CALL*)drawEndWidget;
-	ptrToWidget = this;
-}
+*/
